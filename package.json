@@ -1,0 +1,12 @@
+{
+  "name": "conway",
+  "version": "1.0.0",
+  "description": "A simple implementation of Conway's Game of Life.",
+  "main": "index.js",
+  "scripts": {
+    "play-game": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
