@@ -34,7 +34,7 @@ function stepBoard(board) {
       var neighbors = 0;
       for (var dr = -1; dr <= 1; dr++) {
         for (var dc = -1; dc <= 1; dc++) {
-          if ((dc == 0 && dr == 0) ||
+          if ((dc === 0 && dr === 0) ||
               (r + dr < 0 || r + dr >= rowCount) ||
               (c + dc < 0 || c + dc >= colCount)) {
             continue;
@@ -43,9 +43,9 @@ function stepBoard(board) {
         }
       }
 
-      if (board[r][c] && neighbors != 2) {
+      if (board[r][c] && neighbors !== 2) {
         newBoard[r][c] = 0;
-      } else if (!board[r][c] && neighbors == 2) {
+      } else if (!board[r][c] && neighbors === 3) {
         newBoard[r][c] = 1;
       } else {
         newBoard[r][c] = board[r][c];
