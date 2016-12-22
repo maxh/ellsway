@@ -1,6 +1,8 @@
 function run() {
-  var board = createBoard(10, 10);
+  var board = createBoard(10, getColumnsNeeded(10));
   createBoardDom(board);
+  updateBoardDom(board);
+
   var step = function() {
     board = stepBoard(board);
     updateBoardDom(board);
@@ -10,9 +12,8 @@ function run() {
 }
 
 function createBoard(rowCount, colCount) {
-  var board = [];
+  var board = createEmptyBoard(rowCount, colCount);
   for (var r = 0; r < rowCount; r++) {
-    board.push([]);
     for (var c = 0; c < colCount; c++) {
       board[r][c] = Math.random() >= .5 ? 1 : 0;
     }
@@ -20,30 +21,22 @@ function createBoard(rowCount, colCount) {
   return board;
 }
 
-function stepBoard(board) {
-  var newBoard = [];
-  board.forEach(function(row) {
-    newBoard.push([]);
-  });
+function createEmptyBoard(rowCount, colCount) {
+  var board = [];
+  for (var r = 0; r < rowCount; r++) {
+    board.push([]);
+  }
+  return board;
+}
 
+function stepBoard(board) {
   var rowCount = board.length;
   var colCount = board[0].length;
+  var newBoard = createEmptyBoard(rowCount, colCount);
   for (var r = 0; r < rowCount; r++) {
     for (var c = 0; c < colCount; c++) {
-
-      var neighbors = 0;
-      for (var dr = -1; dr <= 1; dr++) {
-        for (var dc = -1; dc <= 1; dc++) {
-          if ((dc === 0 && dr === 0) ||
-              (r + dr < 0 || r + dr >= rowCount) ||
-              (c + dc < 0 || c + dc >= colCount)) {
-            continue;
-          }
-          neighbors += board[r + dr][c + dc];
-        }
-      }
-
-      if (board[r][c] && neighbors !== 2) {
+      var neighbors = getNeighborCount(board, r, c);
+      if (board[r][c] && (neighbors < 2 || neighbors > 3) ) {
         newBoard[r][c] = 0;
       } else if (!board[r][c] && neighbors === 3) {
         newBoard[r][c] = 1;
@@ -56,6 +49,23 @@ function stepBoard(board) {
   return newBoard;
 };
 
+function getNeighborCount(board, r, c) {
+  var neighbors = 0;
+  var rowCount = board.length;
+  var colCount = board[0].length;
+  for (var dr = -1; dr <= 1; dr++) {
+    for (var dc = -1; dc <= 1; dc++) {
+      if ((dc === 0 && dr === 0) ||
+          (r + dr < 0 || r + dr >= rowCount) ||
+          (c + dc < 0 || c + dc >= colCount)) {
+        continue;
+      }
+      neighbors += board[r + dr][c + dc];
+    }
+  }
+  return neighbors;
+}
+
 function printBoard(board) {
   console.log('');
   board.forEach(function(row) {
@@ -65,14 +75,16 @@ function printBoard(board) {
 
 function createBoardDom(board) {
   var tbody = document.querySelector('.cells');
-  board.forEach(function(row, r) {
+  var rowCount = board.length;
+  var colCount = board[0].length;
+  for (var r = 0; r < rowCount; r++) {
     var row = tbody.appendChild(document.createElement('tr'));
-    board.forEach(function(col, c) {
+    for (var c = 0; c < colCount; c++) {
       var cell = document.createElement('td');
       cell.classList.add(getClass(r, c));
       row.appendChild(cell);
-    })
-  })
+    }
+  }
 }
 
 function getClass(r, c) {
@@ -80,16 +92,24 @@ function getClass(r, c) {
 }
 
 function updateBoardDom(board) {
-  board.forEach(function(row, r) {
-    board.forEach(function(col, c) {
+  var rowCount = board.length;
+  var colCount = board[0].length;
+  for (var r = 0; r < rowCount; r++) {
+    for (var c = 0; c < colCount; c++) {
       var cell = document.querySelector('.' + getClass(r, c));
       if (board[r][c]) {
         cell.classList.add('alive');
       } else {
         cell.classList.remove('alive');
       }
-    });
-  })
+    }
+  }
+}
+
+function getColumnsNeeded(rows) {
+  var ratio = window.innerWidth / window.innerHeight;
+  var columns = rows * ratio;
+  return Math.ceil(columns);
 }
 
 run();
