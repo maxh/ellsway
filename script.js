@@ -1,14 +1,20 @@
+var timer;
+
+
 function run() {
+  clearTimeout(timer);
+
   var board = createBoard(10, getColumnsNeeded(10));
   createBoardDom(board);
   updateBoardDom(board);
 
-  var step = function() {
-    board = stepBoard(board);
-    updateBoardDom(board);
-    setTimeout(step, 1000);
+  var step = function(board) {
+    var newBoard = stepBoard(board);
+    updateBoardDom(newBoard);
+    timer = setTimeout(step.bind(null, newBoard), 1000);
   };
-  setTimeout(step, 1000);
+
+  timer = setTimeout(step.bind(null, board), 1000);
 }
 
 function createBoard(rowCount, colCount) {
@@ -45,7 +51,6 @@ function stepBoard(board) {
       }
     }
   }
-
   return newBoard;
 };
 
@@ -75,6 +80,7 @@ function printBoard(board) {
 
 function createBoardDom(board) {
   var tbody = document.querySelector('.cells');
+  tbody.innerHTML = '';
   var rowCount = board.length;
   var colCount = board[0].length;
   for (var r = 0; r < rowCount; r++) {
@@ -111,5 +117,7 @@ function getColumnsNeeded(rows) {
   var columns = rows * ratio;
   return Math.ceil(columns);
 }
+
+document.querySelector('.reset').addEventListener('click', run);
 
 run();

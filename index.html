@@ -2,7 +2,7 @@
 <html>
   <head>
     <style>
-      * {
+      html, body, table {
         margin: 0;
         padding: 0;
         border: 0;
@@ -12,6 +12,12 @@
       .alive {
         background-color: black;
       }
+      .reset {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        z-index: 1;
+      }
       td {
         width: 10vh;
         height: 10vh;
@@ -19,11 +25,10 @@
     </style>
   </head>
   <body>
-    <div class="board">
-      <table>
-        <tbody class="cells"></tbody>
-      </table>
-    </div>
+    <table>
+      <tbody class="cells"></tbody>
+    </table>
+    <button class="reset">Reset</button>
     <script src="script.js"></script>
   </body>
 </html>
