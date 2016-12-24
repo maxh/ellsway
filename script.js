@@ -1,22 +1,3 @@
-var timer;
-
-function run() {
-  clearTimeout(timer);
-
-  var board = new Board(10, BoardRenderer.getColumnsNeeded(10));
-  var renderer = new BoardRenderer(board);
-  renderer.createDom();
-  renderer.updateDom();
-
-  var step = function() {
-    board.step();
-    renderer.updateDom();
-    timer = setTimeout(step, 1000);
-  };
-
-  timer = setTimeout(step, 1000);
-}
-
 class Board {
   constructor(rowCount, colCount) {
     this.rowCount = rowCount;
@@ -39,14 +20,6 @@ class Board {
       }
     }
     this.model = newModel;
-  }
-
-  forEachCell(fn) {
-    for (var r = 0; r < rowCount; r++) {
-      for (var c = 0; c < colCount; c++) {
-        fn(r, c);
-      }
-    }
   }
 
   _getNeighborCount(r, c) {
@@ -146,13 +119,26 @@ class BoardRenderer {
   }
 }
 
-function printBoard(board) {
-  console.log('');
-  board.forEach(function(row) {
-    console.log(row.join(''));
-  })
-}
+(function() {
+  var timer;
 
-document.querySelector('.reset').addEventListener('click', run);
+  function run() {
+    clearTimeout(timer);
 
-run();
+    var board = new Board(10, BoardRenderer.getColumnsNeeded(10));
+    var renderer = new BoardRenderer(board);
+    renderer.createDom();
+    renderer.updateDom();
+
+    var step = function() {
+      board.step();
+      renderer.updateDom();
+      timer = setTimeout(step, 1000);
+    };
+
+    timer = setTimeout(step, 1000);
+  }
+
+  document.querySelector('.reset').addEventListener('click', run);
+  run();
+})();
