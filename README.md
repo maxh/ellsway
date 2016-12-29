@@ -10,4 +10,5 @@ What you'd get if [Ellsworth Kelly](https://en.wikipedia.org/wiki/Ellsworth_Kell
 git clone https://github.com/maxh/ellsway.git
 cd ellsway
 python -m SimpleHTTPServer
+# Visit http://localhost:8000 in your browser.
 ```
