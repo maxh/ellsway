@@ -79,10 +79,8 @@ class BoardRenderer {
       for (var c = 0; c < this.board.colCount; c++) {
         var cell = document.querySelector('.' + BoardRenderer.getClass(r, c));
         if (this.board.model[r][c]) {
-          cell.classList.add('alive');
           cell.style.backgroundColor = BoardRenderer.getRandomColor();
         } else {
-          cell.classList.remove('alive');
           cell.style.backgroundColor = '#000';
         }
       }
